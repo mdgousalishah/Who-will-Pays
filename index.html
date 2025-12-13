@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who Pays? - Fair & Fun Picker</title>
+    <meta name="description" content="Decide who pays for tea, coffee, or lunch with this fair, random name picker.">
+    <meta name="author" content="Kamel Shah">
+
+    <!-- Fonts: Poppins for a playful yet clean vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            /* Defaulting to Dark Mode colors in variables structure, 
+               but utilizing data-theme attribute for switching. 
+               Base :root is Light, overwritten by [data-theme="dark"] */
+            --primary: #ff6b6b; 
+            --primary-dark: #ee5253;
+            --accent: #4ecdc4;
+            --bg-body: #f7f9fc;
+            --bg-card: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --border: #dfe6e9;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --success: #1dd1a1;
+            --warning: #feca57;
+            --dice-color: #ffffff;
+            --dot-color: #ff6b6b;
+        }
+
+        [data-theme="dark"] {
+            --primary: #ff7675;
+            --primary-dark: #d63031;
+            --accent: #55efc4;
+            --bg-body: #1e272e;
+            --bg-card: #2d3436;
+            --text-main: #dfe6e9;
+            --text-muted: #b2bec3;
+            --border: #636e72;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --dice-color: #2d3436;
+            --dot-color: #ff7675;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            perspective: 1000px; /* Enable 3D space for body */
+        }
+
+        /* =========================================
+           LAYOUT & TYPOGRAPHY
+           ========================================= */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 2;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            /* 3D Float Animation for Logo */
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-5px) rotateX(5deg); }
+            100% { transform: translateY(0px) rotateX(0deg); }
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s, transform 0.2s;
+        }
+        
+        .icon-btn:hover { 
+            background: rgba(0,0,0,0.05); 
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* =========================================
+           3D CARDS & SECTIONS
+           ========================================= */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            /* 3D Tilt Properties */
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease-out; /* Smooth follow */
+        }
+
+        .section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            transform: translateZ(20px); /* Pop out text slightly */
+        }
+
+        .section-divider {
+            margin: 1.5rem 0;
+            border: 0;
+            border-top: 1px dashed var(--border);
+        }
+
+        /* =========================================
+           1. ITEM SELECTION & COST
+           ========================================= */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            transform: translateZ(10px);
+        }
+
+        @media(min-width: 500px) {
+            .items-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .item-btn {
+            background: var(--bg-body);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 0.75rem 0.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-muted);
+            transform: translateZ(0px);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .item-btn i { font-size: 1.2rem; }
+        .item-btn span { font-size: 0.7rem; font-weight: 600; text-align: center; line-height: 1.2; }
+
+        .item-btn:hover { 
+            background: rgba(0,0,0,0.03); 
+            transform: translateZ(10px) scale(1.05);
+        }
+        
+        .item-btn.active {
+            border-color: var(--primary);
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
+            transform: translateZ(15px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .custom-item-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            transform: translateZ(5px);
+        }
+
+        .custom-item-input:focus { border-color: var(--accent); }
+
+        /* Cost Calculation Row */
+        .cost-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+            transform: translateZ(5px);
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .input-group label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cost-input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: inherit;
+            font-weight: 600;
+            outline: none;
+            text-align: center;
+        }
+
+        .cost-input:focus { border-color: var(--accent); }
+        
+        .cost-input.readonly {
+            background: transparent;
+            border-color: transparent;
+            color: var(--text-muted);
+        }
+
+        .total-box {
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            height: 100%;
+            min-height: 42px;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+            transform: translateZ(10px);
+        }
+
+        /* =========================================
+           2. NAME INPUT
+           ========================================= */
+        .presets-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            transform: translateZ(10px);
+        }
+
+        .chip-preset {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        
+        .chip-preset:hover { 
+            border-color: var(--accent); 
+            color: var(--accent); 
+            transform: translateY(-2px);
+        }
+
+        .add-player-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            transform: translateZ(5px);
+        }
+
+        .player-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .player-input:focus { border-color: var(--accent); }
+
+        .add-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            box-shadow: 0 3px 8px rgba(78, 205, 196, 0.3);
+        }
+        .add-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .player-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-height: 250px;
+            overflow-y: auto;
+            align-content: flex-start;
+            margin-bottom: 0.5rem;
+            transform: translateZ(5px);
+        }
+
+        .empty-msg {
+            width: 100%;
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+        }
+
+        .player-chip {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: fadeIn 0.2s;
+            transition: transform 0.2s;
+        }
+        
+        .player-chip:hover {
+            transform: scale(1.05) translateZ(5px);
+            border-color: var(--primary);
+        }
+
+        [data-theme="dark"] .player-chip {
+            background: var(--bg-card);
+        }
+
+        .player-chip .remove-icon {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+        }
+
+        .player-chip .remove-icon:hover { color: var(--primary); }
+
+        .input-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            transform: translateZ(5px);
+        }
+
+        .text-btn {
+            background: none;
+            border: none;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .text-btn:hover { color: var(--primary); }
+
+        /* =========================================
+           3. ACTION & RESULT (3D Dice)
+           ========================================= */
+        .action-area {
+            text-align: center;
+            margin: 1rem 0;
+            perspective: 800px; /* Perspective for button click */
+        }
+
+        .pay-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4), 0 10px 0px rgba(238, 82, 83, 1);
+            transition: transform 0.1s, box-shadow 0.1s;
+            width: 100%;
+            max-width: 300px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .pay-btn:active { 
+            transform: translateY(10px);
+            box-shadow: 0 0 5px rgba(255, 107, 107, 0.4), 0 0 0px rgba(238, 82, 83, 1);
+        }
+        
+        .pay-btn:hover { filter: brightness(1.1); }
+
+        /* --- 3D Dice Overlay --- */
+        #diceOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            perspective: 1000px;
+            backdrop-filter: blur(5px);
+        }
+        
+        #diceOverlay.show { display: flex; animation: fadeIn 0.3s; }
+
+        .dice-scene {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 50px;
+        }
+
+        .dice {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+        
+        /* Animation class added via JS */
+        .dice.rolling {
+            animation: rollDice 1.5s ease-out infinite;
+        }
+
+        @keyframes rollDice {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            25% { transform: rotateX(180deg) rotateY(90deg) rotateZ(45deg); }
+            50% { transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg); }
+            75% { transform: rotateX(540deg) rotateY(270deg) rotateZ(135deg); }
+            100% { transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg); }
+        }
+
+        .face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: var(--dice-color);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .dot {
+            width: 18px;
+            height: 18px;
+            background: var(--dot-color);
+            border-radius: 50%;
+            box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
+        }
+
+        /* Face positioning */
+        .front  { transform: rotateY(0deg) translateZ(50px); display: flex; justify-content: center; align-items: center; } /* 1 dot */
+        .back   { transform: rotateY(180deg) translateZ(50px); display: grid; grid-template-columns: 1fr 1fr; padding: 20px; gap: 10px; } /* 6 dots */
+        .right  { transform: rotateY(90deg) translateZ(50px); display: flex; justify-content: space-between; padding: 20px; } /* 2 dots */
+        .left   { transform: rotateY(-90deg) translateZ(50px); display: grid; grid-template-columns: 1fr 1fr; padding: 20px; gap: 10px; } /* 5 dots (center logic handled below) */
+        .top    { transform: rotateX(90deg) translateZ(50px); display: flex; justify-content: space-between; padding: 20px; } /* 3 dots */
+        .bottom { transform: rotateX(-90deg) translateZ(50px); display: grid; grid-template-columns: 1fr 1fr; padding: 20px; } /* 4 dots */
+
+        /* Specific Dot Layouts */
+        .one { justify-content: center; align-items: center; }
+        .two { justify-content: space-between; }
+        .two .dot:nth-child(2) { align-self: flex-end; }
+        
+        .three { justify-content: space-between; }
+        .three .dot:nth-child(2) { align-self: center; }
+        .three .dot:nth-child(3) { align-self: flex-end; }
+
+        .four { grid-template-columns: 1fr 1fr; gap: 20px; justify-items: center; align-items: center; }
+        
+        .five { grid-template-columns: 1fr 1fr; gap: 10px; justify-items: center; align-items: center; position: relative; }
+        .five .dot:nth-child(5) { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        .six { grid-template-columns: 1fr 1fr; gap: 10px; justify-items: center; align-items: center; }
+
+
+        .rolling-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: pulseText 0.5s infinite alternate;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        @keyframes pulseText { from { opacity: 0.5; } to { opacity: 1; } }
+
+
+        /* --- Result Card --- */
+        .result-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+            display: none; 
+            /* 3D Entry Animation */
+            transform-style: preserve-3d;
+            animation: popIn3D 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        .result-card.show { display: block; }
+
+        @keyframes popIn3D {
+            0% { opacity: 0; transform: scale(0.5) rotateX(-90deg); }
+            100% { opacity: 1; transform: scale(1) rotateX(0deg); }
+        }
+
+        .result-intro { font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .result-name { font-size: 2.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem; word-break: break-word; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .result-item { font-size: 1.2rem; font-weight: 500; opacity: 0.95; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transform: translateZ(20px); }
+        
+        .result-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            transform: translateZ(30px);
+        }
+
+        .res-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .res-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+        /* =========================================
+           4. SETTINGS & HISTORY
+           ========================================= */
+        .settings-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        input[type="checkbox"] { accent-color: var(--primary); width: 16px; height: 16px; }
+
+        .history-list {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s;
+        }
+        
+        .history-item:last-child { border-bottom: none; }
+        .h-name { font-weight: 600; }
+        .h-item { color: var(--text-muted); font-size: 0.8rem; }
+
+        /* =========================================
+           UTILITIES & ANIMATION
+           ========================================= */
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .hidden { display: none !important; }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        .toast.visible { opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+    
+    <!-- 3D Dice Overlay -->
+    <div id="diceOverlay">
+        <div class="dice-scene">
+            <div class="dice" id="dice3d">
+                <div class="face front one">
+                    <div class="dot"></div>
+                </div>
+                <div class="face back six">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+                <div class="face right two">
+                    <div class="dot"></div><div class="dot"></div>
+                </div>
+                <div class="face left five">
+                    <div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <div class="face top three">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+                <div class="face bottom four">
+                    <div class="dot"></div><div class="dot"></div>
+                    <div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+        </div>
+        <div class="rolling-text">ROLLING...</div>
+    </div>
+
+    <div class="container">
+        
+        <!-- HEADER -->
+        <header>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <!-- Logo Image -->
+                <img src="/kamel logo copy.png" alt="Kamel Shah Logo" style="height: 55px; width: auto; border-radius: 8px; object-fit: contain; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                <div>
+                    <h1>Who Pays?</h1>
+                    <p class="subtitle">Fair & Fun Random Picker</p>
+                </div>
+            </div>
+            <button class="icon-btn" id="themeToggle" title="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- MAIN CARD: WHAT ARE WE HAVING? + WHO IS PARTICIPATING? -->
+        <section class="card js-tilt-card">
+            <div class="section-title">
+                <span>What are we having?</span>
+            </div>
+            <div class="items-grid" id="itemsGrid">
+                <!-- Buttons injected by JS -->
+            </div>
+            <input type="text" id="customItemInput" class="custom-item-input" placeholder="Or type custom item (e.g. Pizza)">
+
+            <!-- COST ROW -->
+            <div class="cost-row">
+                <div class="input-group">
+                    <label>Price (₹)</label>
+                    <input type="number" id="priceInput" class="cost-input" placeholder="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label>Players</label>
+                    <input type="number" id="countInputSync" class="cost-input readonly" value="0" readonly>
+                </div>
+                <div class="input-group">
+                    <label>Total</label>
+                    <div class="total-box" id="grandTotalDisplay">₹0</div>
+                </div>
+            </div>
+
+            <!-- DIVIDER & NEW SECTION IN SAME CARD -->
+            <hr class="section-divider">
+            
+            <div class="section-title">
+                <span>Who is participating?</span>
+                <span id="countDisplay" style="font-weight:400; color:var(--primary)">0 people</span>
+            </div>
+            
+            <div class="presets-bar">
+                <button class="chip-preset" onclick="loadPreset('Friends')">Friends</button>
+                <button class="chip-preset" onclick="loadPreset('Office')">Office</button>
+                <button class="chip-preset" onclick="loadPreset('Class')">Class</button>
+                <button class="chip-preset" style="border-style:dashed" onclick="saveCurrentAsPreset()">+ Save Group</button>
+            </div>
+
+            <!-- PLAYER INPUT ROW -->
+            <div class="add-player-row">
+                <input type="text" id="newPlayerInput" class="player-input" placeholder="Type name & hit Enter...">
+                <button id="addPlayerBtn" class="add-btn"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <!-- PLAYER LIST CONTAINER -->
+            <div id="playerList" class="player-list">
+                <!-- Player Chips injected here -->
+                <div class="empty-msg">No players yet. Add someone above!</div>
+            </div>
+            
+            <div class="input-actions">
+                <button class="text-btn" id="addSampleBtn">Add Samples</button>
+                <button class="text-btn" style="color:var(--primary)" id="clearBtn">Clear List</button>
+            </div>
+        </section>
+
+        <!-- 3. ACTION & RESULT -->
+        <div class="action-area">
+            <button class="pay-btn" id="pickBtn">
+                WHO PAYS? <i class="fa-solid fa-dice"></i>
+            </button>
+        </div>
+
+        <div id="resultCard" class="result-card js-tilt-card">
+            <div class="result-intro">The bill goes to</div>
+            <div class="result-name" id="winnerName">Rahul</div>
+            <div class="result-item">
+                for <span id="winnerItem">Tea ☕</span>
+            </div>
+            <div class="result-actions">
+                <button class="res-btn" id="spinAgainBtn"><i class="fa-solid fa-rotate-right"></i> Spin Again</button>
+                <button class="res-btn" id="shareBtn"><i class="fa-brands fa-whatsapp"></i> Share</button>
+            </div>
+        </div>
+
+        <!-- 4. SETTINGS & HISTORY -->
+        <section>
+            <div class="settings-bar">
+                <label class="toggle-label">
+                    <input type="checkbox" id="excludePrev" checked> Exclude previous payer
+                </label>
+                <!-- Sound Toggle removed, sound is now mandatory -->
+                <label class="toggle-label">
+                    <input type="checkbox" id="confettiToggle" checked> Confetti
+                </label>
+            </div>
+            
+            <div class="card js-tilt-card" style="margin-top: 1rem;">
+                <div class="section-title">
+                    <span>Recent History</span>
+                    <button class="text-btn" id="clearHistoryBtn">Reset</button>
+                </div>
+                <ul class="history-list" id="historyList">
+                    <li class="history-item" style="justify-content:center; color:var(--text-muted)">No history yet</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p style="text-align:center; font-size:0.8rem; color:var(--text-muted); margin-top:2rem; line-height: 1.6;">
+                Fairness Guarantee: Logic uses unbiased Math.random().<br>
+                <strong>Website Design and Developed by Kamel Shah</strong>
+            </p>
+        </footer>
+
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">Message</div>
+
+    <script>
+        /**
+         * WHO PAYS? - WEB APP
+         * Author: Kamel Shah
+         */
+
+        // --- Data & State ---
+        const ITEMS = [
+            { id: 'tea', label: 'Tea', icon: 'fa-mug-hot' },
+            { id: 'coffee', label: 'Coffee', icon: 'fa-mug-saucer' },
+            { id: 'cold-drink', label: 'Drinks', icon: 'fa-glass-water' },
+            { id: 'breakfast', label: 'Breakfast', icon: 'fa-egg' },
+            { id: 'lunch', label: 'Lunch', icon: 'fa-bowl-rice' },
+            { id: 'pizza', label: 'Pizza', icon: 'fa-pizza-slice' },
+            { id: 'burger', label: 'Burger', icon: 'fa-burger' },
+            { id: 'ice-cream', label: 'Ice Cream', icon: 'fa-ice-cream' },
+            { id: 'dinner', label: 'Dinner', icon: 'fa-utensils' },
+            { id: 'gulab', label: 'Gulab Jamun', icon: 'fa-cookie' }, 
+        ];
+
+        let state = {
+            selectedItem: 'tea', // Default
+            customItem: 'Tea',   // Default text match
+            names: [],           // Array of strings
+            history: [], 
+            lastWinner: null,
+            // DEFAULT THEME IS NOW DARK
+            theme: localStorage.getItem('wp_theme') || 'dark',
+            totalAmount: 0 
+        };
+
+        // --- DOM Elements ---
+        const itemsGrid = document.getElementById('itemsGrid');
+        const customItemInput = document.getElementById('customItemInput');
+        const priceInput = document.getElementById('priceInput');
+        const countInputSync = document.getElementById('countInputSync');
+        const grandTotalDisplay = document.getElementById('grandTotalDisplay');
+
+        // Player DOM Elements
+        const newPlayerInput = document.getElementById('newPlayerInput');
+        const addPlayerBtn = document.getElementById('addPlayerBtn');
+        const playerList = document.getElementById('playerList');
+        
+        const countDisplay = document.getElementById('countDisplay');
+        const pickBtn = document.getElementById('pickBtn');
+        const resultCard = document.getElementById('resultCard');
+        const winnerNameEl = document.getElementById('winnerName');
+        const winnerItemEl = document.getElementById('winnerItem');
+        const historyList = document.getElementById('historyList');
+        const toast = document.getElementById('toast');
+        const diceOverlay = document.getElementById('diceOverlay');
+        const dice3d = document.getElementById('dice3d');
+        
+        // Toggles
+        const themeToggle = document.getElementById('themeToggle');
+        const excludePrevToggle = document.getElementById('excludePrev');
+        const confettiToggle = document.getElementById('confettiToggle');
+
+        // Audio Context
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        // --- Initialization ---
+        function init() {
+            // Render Items
+            renderItems();
+            
+            // Load Names (Migration logic included)
+            const savedNames = localStorage.getItem('wp_names_arr');
+            const oldSavedNames = localStorage.getItem('wp_names'); // Legacy check
+            
+            if (savedNames) {
+                state.names = JSON.parse(savedNames);
+            } else if (oldSavedNames) {
+                // Migrate from old format
+                state.names = oldSavedNames.split('\n').map(n=>n.trim()).filter(n=>n);
+            }
+            
+            renderPlayers();
+            updateCount();
+
+            // Set Theme
+            document.documentElement.setAttribute('data-theme', state.theme);
+            updateThemeIcon();
+
+            // Init 3D Tilt
+            initTiltEffect();
+        }
+
+        // --- 3D Tilt Effect ---
+        function initTiltEffect() {
+            const cards = document.querySelectorAll('.js-tilt-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg tilt
+                    const rotateY = ((x - centerX) / centerX) * 5;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                });
+            });
+        }
+
+        // --- Items Logic ---
+        function renderItems() {
+            itemsGrid.innerHTML = '';
+            ITEMS.forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = `item-btn ${state.selectedItem === item.id ? 'active' : ''}`;
+                btn.onclick = () => selectItem(item.id);
+                btn.innerHTML = `
+                    <i class="fa-solid ${item.icon}"></i>
+                    <span>${item.label}</span>
+                `;
+                itemsGrid.appendChild(btn);
+            });
+        }
+
+        function selectItem(id) {
+            state.selectedItem = id;
+            const item = ITEMS.find(i => i.id === id);
+            
+            // Sync with custom input box as per request
+            if(item) {
+                state.customItem = item.label;
+                customItemInput.value = item.label;
+            }
+            
+            renderItems();
+        }
+
+        customItemInput.addEventListener('input', (e) => {
+            state.selectedItem = null; // Deselect presets visually if typing
+            state.customItem = e.target.value;
+            renderItems(); 
+        });
+
+        // --- Cost Calculation Logic ---
+        function updateCost() {
+            const count = state.names.length;
+            countInputSync.value = count;
+            
+            const price = parseFloat(priceInput.value) || 0;
+            state.totalAmount = count * price;
+            
+            grandTotalDisplay.innerText = `₹${state.totalAmount.toLocaleString()}`;
+        }
+        
+        priceInput.addEventListener('input', updateCost);
+
+        // --- Player Management (New Logic) ---
+        function renderPlayers() {
+            playerList.innerHTML = '';
+            
+            if (state.names.length === 0) {
+                playerList.innerHTML = '<div class="empty-msg">No players yet. Add someone above!</div>';
+            } else {
+                state.names.forEach((name, index) => {
+                    const chip = document.createElement('div');
+                    chip.className = 'player-chip';
+                    chip.innerHTML = `
+                        <span>${name}</span>
+                        <div class="remove-icon" onclick="removePlayer(${index})">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
+                    `;
+                    playerList.appendChild(chip);
+                });
+            }
+            
+            // Auto scroll to bottom of list when adding
+            playerList.scrollTop = playerList.scrollHeight;
+        }
+
+        function addPlayer() {
+            const val = newPlayerInput.value.trim();
+            if (!val) return;
+            
+            // Handle comma separated paste
+            const newNames = val.split(/[\n,]+/).map(n => n.trim()).filter(n => n);
+            state.names = [...state.names, ...newNames];
+            
+            newPlayerInput.value = '';
+            newPlayerInput.focus();
+            
+            saveNames();
+            renderPlayers();
+            updateCount();
+        }
+
+        window.removePlayer = function(index) {
+            state.names.splice(index, 1);
+            saveNames();
+            renderPlayers();
+            updateCount();
+        }
+
+        function saveNames() {
+            localStorage.setItem('wp_names_arr', JSON.stringify(state.names));
+            // Also update updateCost logic inside updateCount
+        }
+
+        function updateCount() {
+            const count = state.names.length;
+            countDisplay.innerText = `${count} people`;
+            updateCost();
+        }
+
+        // Event Listeners for Player Input
+        addPlayerBtn.addEventListener('click', addPlayer);
+        newPlayerInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addPlayer();
+        });
+
+        document.getElementById('addSampleBtn').onclick = () => {
+            const samples = ["Rahul", "Priya", "Amit", "Sneha", "Vikram"];
+            state.names = [...state.names, ...samples];
+            saveNames();
+            renderPlayers();
+            updateCount();
+            showToast("Samples added");
+        };
+
+        document.getElementById('clearBtn').onclick = () => {
+            if(confirm("Clear all names?")) {
+                state.names = [];
+                saveNames();
+                renderPlayers();
+                updateCount();
+            }
+        };
+
+        // --- Presets Logic ---
+        function loadPreset(key) {
+            const saved = localStorage.getItem(`wp_preset_arr_${key}`);
+            
+            if (saved) {
+                state.names = JSON.parse(saved);
+                showToast(`Loaded ${key} group`);
+            } else {
+                // Defaults
+                if(key === 'Office') state.names = ["Boss", "Manager", "Intern", "Me"];
+                else if(key === 'Friends') state.names = ["Buddy 1", "Buddy 2", "Buddy 3"];
+                else if(key === 'Class') state.names = ["Topper", "Backbencher", "Monitor"];
+            }
+            saveNames();
+            renderPlayers();
+            updateCount();
+        }
+        window.loadPreset = loadPreset; 
+
+        window.saveCurrentAsPreset = function() {
+            if(state.names.length === 0) {
+                showToast("Add players first!");
+                return;
+            }
+            const name = prompt("Enter group name (e.g. 'Gym Buddies'):");
+            if (name) {
+                localStorage.setItem(`wp_preset_arr_${name}`, JSON.stringify(state.names));
+                showToast(`Saved as '${name}'`);
+            }
+        }
+
+        // --- PICKER LOGIC (The Core) ---
+        pickBtn.onclick = () => {
+            if (state.names.length < 2) {
+                showToast("Need at least 2 people!");
+                newPlayerInput.focus();
+                return;
+            }
+
+            // Determine Item Name from custom input which is synced
+            let itemName = customItemInput.value.trim() || "Treats";
+
+            // Filter out previous winner if enabled
+            let candidates = [...state.names];
+            if (excludePrevToggle.checked && state.lastWinner && candidates.includes(state.lastWinner) && candidates.length > 1) {
+                candidates = candidates.filter(n => n !== state.lastWinner);
+            }
+
+            // --- 3D DICE LOGIC START ---
+            
+            // Resume Audio Context on click (User Interaction) - Mandatory Sound
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // 1. Hide Result Card if open
+            resultCard.classList.remove('show');
+            
+            // 2. Show Dice Overlay
+            diceOverlay.classList.add('show');
+            dice3d.classList.add('rolling');
+            
+            // 3. Play Rolling Sound (Repeated low thud)
+            let rollInterval = setInterval(() => {
+                playTone(100 + Math.random()*50, 'triangle', 0.05);
+            }, 100);
+
+            // 4. Wait for animation
+            setTimeout(() => {
+                clearInterval(rollInterval);
+                diceOverlay.classList.remove('show');
+                dice3d.classList.remove('rolling');
+                
+                // 5. Finalize
+                finalizePick(candidates, itemName);
+            }, 2000); // 2 seconds roll
+            
+        };
+
+        function finalizePick(candidates, itemName) {
+            // Fisher-Yates Random Selection
+            const randomIndex = Math.floor(Math.random() * candidates.length);
+            const winner = candidates[randomIndex];
+            state.lastWinner = winner;
+
+            // UI Update
+            winnerNameEl.innerText = winner;
+            
+            // Add Amount to result text if > 0
+            if(state.totalAmount > 0) {
+                 winnerItemEl.innerHTML = `${itemName} <br><span style="font-size:0.9rem; opacity:0.9">(Total: ₹${state.totalAmount.toLocaleString()})</span>`;
+            } else {
+                 winnerItemEl.innerText = itemName;
+            }
+            
+            resultCard.classList.add('show');
+            
+            // Re-init tilt on result card after showing
+            initTiltEffect();
+
+            // Effects
+            playWinSound(); // Mandatory Sound
+            if (confettiToggle.checked) fireConfetti();
+
+            // History
+            addToHistory(winner, itemName);
+            
+            // Scroll to result
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // --- History Logic ---
+        function addToHistory(name, item) {
+            state.history.unshift({ name, item, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            if (state.history.length > 5) state.history.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            if (state.history.length === 0) {
+                historyList.innerHTML = '<li class="history-item" style="justify-content:center; color:var(--text-muted)">No history yet</li>';
+                return;
+            }
+            state.history.forEach(h => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = `
+                    <div>
+                        <span class="h-name">${h.name}</span> <span class="h-item">paid for ${h.item}</span>
+                    </div>
+                    <span class="h-item">${h.time}</span>
+                `;
+                historyList.appendChild(li);
+            });
+        }
+        
+        document.getElementById('clearHistoryBtn').onclick = () => {
+            state.history = [];
+            state.lastWinner = null;
+            renderHistory();
+        }
+
+        // --- Share & Spin Again ---
+        document.getElementById('spinAgainBtn').onclick = () => {
+            pickBtn.click();
+        };
+
+        document.getElementById('shareBtn').onclick = () => {
+            const itemText = winnerItemEl.innerText.replace('\n', ' '); // Flatten newlines
+            let text = `🚨 *Who Pays? Result* 🚨\n\nToday, *${winnerNameEl.innerText}* is paying for *${itemText}*! 💸\n\nDecided fairly by WhoPays App.`;
+            
+            // Fallback for iframe restrictions
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast("Copied! Ready to paste in WhatsApp.");
+            } catch (err) {
+                showToast("Copy failed. Please screenshot!");
+            }
+            
+            document.body.removeChild(textArea);
+        };
+
+        // --- Utilities ---
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 3000);
+        }
+
+        // Theme Toggle
+        themeToggle.onclick = () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', state.theme);
+            localStorage.setItem('wp_theme', state.theme);
+            updateThemeIcon();
+        };
+
+        function updateThemeIcon() {
+            themeToggle.innerHTML = state.theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+        }
+
+        // Audio Synth
+        function playTone(freq, type, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playWinSound() {
+            playTone(400, 'sine', 0.1);
+            setTimeout(() => playTone(600, 'sine', 0.1), 100);
+            setTimeout(() => playTone(800, 'square', 0.2), 200);
+        }
+
+        // Confetti (Lightweight)
+        function fireConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const colors = ['#ff6b6b', '#4ecdc4', '#feca57', '#54a0ff', '#5f27cd'];
+            
+            for(let i=0; i<150; i++) {
+                particles.push({
+                    x: canvas.width / 2, y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 8 + 4,
+                    life: 100
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                let active = false;
+                particles.forEach(p => {
+                    if(p.life <= 0) return;
+                    active = true;
+                    p.x += p.vx; p.y += p.vy;
+                    p.vy += 0.3; // Gravity
+                    p.life--;
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.life / 100;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                });
+                if(active) requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Run
+        init();
+
+    </script>
+</body>
+</html>
