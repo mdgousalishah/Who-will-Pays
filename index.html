@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Who Pays? - Modern Picker</title>
+    <title>Who Will Pay? - Kamel Shah</title>
     <meta name="description" content="Fair random picker for tea, coffee, and bills.">
     <meta name="author" content="Kamel Shah">
 
     <!-- Fonts: Inter for Modern Look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tailwind CSS -->
@@ -79,15 +79,9 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Animated Background */
-        .bg-animated {
-            background-size: 200% 200%;
-            animation: gradientMove 15s ease infinite;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
+        /* Glow Text Effect */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(236, 72, 153, 0.3);
         }
     </style>
 </head>
@@ -127,19 +121,34 @@
     <div class="relative z-10 w-full max-w-md mx-auto p-4 flex-1 flex flex-col h-screen">
         
         <!-- Header -->
-        <header class="flex items-center justify-between py-4 mb-2">
-            <div class="flex items-center gap-3">
-                <div class="relative group">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <div class="relative w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                         <img src="/kamel logo copy.png" alt="Logo" class="w-8 h-8 object-contain" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4206/4206236.png'">
+        <header class="flex justify-between items-start py-5 mb-2">
+            <div>
+                <!-- Credit moved ABOVE heading -->
+                <p class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">
+                    Website Design & Developed by <span class="text-indigo-500 dark:text-indigo-400 glow-sm">Kamel Shah</span>
+                </p>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                        <!-- Logo Adjustment: No padding, full cover, overflow hidden -->
+                        <div class="relative w-16 h-16 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                             <img src="/kamel logo copy.png" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4206/4206236.png'">
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none">
+                            Who Will Pay?
+                        </h1>
+                        <!-- Caption added behind/below -->
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mt-1">
+                            The fair & fun random picker
+                        </p>
                     </div>
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Who Pays?</h1>
-                </div>
             </div>
-            <button id="themeToggle" class="w-10 h-10 rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-md transition-all flex items-center justify-center text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-gray-700">
+            
+            <button id="themeToggle" class="w-10 h-10 rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-700 backdrop-blur-md transition-all flex items-center justify-center text-slate-600 dark:text-slate-300 border border-gray-200 dark:border-gray-700 mt-2">
                 <i class="fa-solid fa-moon"></i>
             </button>
         </header>
@@ -189,7 +198,7 @@
             </div>
 
             <!-- Players Section -->
-            <div class="mb-20">
+            <div class="mb-8">
                 <div class="flex justify-between items-center mb-3 px-1">
                     <h2 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Participants</h2>
                     <button id="clearBtn" class="text-[10px] font-bold text-pink-500 hover:text-pink-400 transition-colors uppercase">Clear All</button>
@@ -206,11 +215,9 @@
                     </div>
                 </div>
 
-                <!-- Presets -->
-                <div class="flex gap-2 overflow-x-auto no-scrollbar mb-4">
-                    <button onclick="loadPreset('Friends')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase bg-white dark:bg-slate-800 text-gray-500 border border-gray-200 dark:border-gray-700 hover:border-indigo-500 hover:text-indigo-500 transition-all shadow-sm">Friends</button>
-                    <button onclick="loadPreset('Office')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase bg-white dark:bg-slate-800 text-gray-500 border border-gray-200 dark:border-gray-700 hover:border-indigo-500 hover:text-indigo-500 transition-all shadow-sm">Office</button>
-                    <button id="addSampleBtn" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase bg-orange-50 dark:bg-orange-900/20 text-orange-500 border border-orange-200 dark:border-orange-900/50 hover:bg-orange-100 transition-all shadow-sm">Add Samples</button>
+                <!-- Presets (Dynamically populated) -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar mb-4" id="presetsBar">
+                    <!-- JS Injected -->
                 </div>
 
                 <!-- List -->
@@ -227,7 +234,7 @@
             <button id="pickBtn" class="group relative w-full h-14 rounded-2xl overflow-hidden shadow-2xl shadow-indigo-500/40 transition-transform active:scale-95">
                 <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_auto] animate-[gradientMove_3s_linear_infinite]"></div>
                 <div class="relative h-full flex items-center justify-center gap-3 text-white font-bold text-lg tracking-wide uppercase">
-                    <span>Who Pays?</span>
+                    <span>Who Will Pay?</span>
                     <i class="fa-solid fa-dice text-xl group-hover:rotate-180 transition-transform duration-500"></i>
                 </div>
             </button>
@@ -317,10 +324,9 @@
     <script>
         /**
          * WHO PAYS? - MODERN EDITION
-         * Logic preserved, UI completely revamped.
+         * Fully Fixed & Optimized
          */
 
-        // --- Data ---
         const ITEMS = [
             { id: 'tea', label: 'Tea', icon: 'fa-mug-hot', color: 'text-orange-500' },
             { id: 'coffee', label: 'Coffee', icon: 'fa-mug-saucer', color: 'text-amber-700' },
@@ -333,14 +339,14 @@
         let state = {
             selectedItem: 'tea',
             customItem: 'Tea',
-            names: [], // { name: string, isSample: boolean }
+            names: [], 
             history: [],
             lastWinner: null,
             theme: localStorage.getItem('wp_theme') || 'dark',
-            totalAmount: 0
+            totalAmount: 0,
+            presets: ['Friends', 'Office'] // Default presets keys
         };
 
-        // --- DOM Cache ---
         const $ = (id) => document.getElementById(id);
         const els = {
             itemsGrid: $('itemsGrid'),
@@ -362,6 +368,7 @@
             historyList: $('historyList'),
             settingsPanel: $('settingsPanel'),
             historyPanel: $('historyPanel'),
+            presetsBar: $('presetsBar'),
             toast: $('toast'),
             confetti: $('confetti-canvas'),
         };
@@ -373,11 +380,11 @@
             renderItems();
             loadState();
             renderPlayers();
+            renderPresets(); // New: Render presets dynamically
             renderHistory();
             updateMath();
             applyTheme();
             
-            // Close modals on outside click
             document.addEventListener('click', (e) => {
                 if(!els.settingsPanel.contains(e.target) && !e.target.closest("button[onclick='toggleSettings()']")) {
                     els.settingsPanel.classList.add('hidden');
@@ -389,11 +396,22 @@
         }
 
         function loadState() {
-            const saved = localStorage.getItem('wp_modern_names');
-            if(saved) state.names = JSON.parse(saved);
-            
-            const hist = localStorage.getItem('wp_modern_history');
-            if(hist) state.history = JSON.parse(hist);
+            try {
+                const saved = localStorage.getItem('wp_modern_names');
+                if(saved) state.names = JSON.parse(saved);
+                
+                const hist = localStorage.getItem('wp_modern_history');
+                if(hist) state.history = JSON.parse(hist);
+
+                // Load custom presets list
+                const savedPresets = localStorage.getItem('wp_custom_presets_keys');
+                if(savedPresets) state.presets = JSON.parse(savedPresets);
+            } catch(e) {
+                console.error("Data load error", e);
+                state.names = [];
+            }
+            // Ensure names is array
+            if(!Array.isArray(state.names)) state.names = [];
         }
 
         function saveState() {
@@ -411,6 +429,22 @@
                     <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase">${item.label}</span>
                 </button>
             `).join('');
+        }
+
+        function renderPresets() {
+            // Render default + custom presets buttons
+            const html = state.presets.map(key => `
+                <button onclick="loadPreset('${key}')" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase bg-white dark:bg-slate-800 text-gray-500 border border-gray-200 dark:border-gray-700 hover:border-indigo-500 hover:text-indigo-500 transition-all shadow-sm whitespace-nowrap">
+                    ${key}
+                </button>
+            `).join('');
+            
+            // Add "Add Samples" button at the end
+            els.presetsBar.innerHTML = html + `
+                <button onclick="addSamples()" class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase bg-orange-50 dark:bg-orange-900/20 text-orange-500 border border-orange-200 dark:border-orange-900/50 hover:bg-orange-100 transition-all shadow-sm whitespace-nowrap">
+                    Add Samples
+                </button>
+            `;
         }
 
         window.selectItem = (id) => {
@@ -467,7 +501,7 @@
             updateMath();
         };
 
-        $('addSampleBtn').onclick = () => {
+        window.addSamples = () => {
             ["Rahul", "Priya", "Amit", "Sneha"].forEach(n => state.names.push({ name: n, isSample: true }));
             saveState(); renderPlayers(); updateMath();
             toast("Samples added (Excluded from cost)");
@@ -494,7 +528,11 @@
                 els.nameInput.focus();
                 return;
             }
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // Fix: Check and resume audio context on click
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(e => console.log(e));
+            }
             
             // Filter
             let candidates = state.names.map(p => p.name);
@@ -603,21 +641,44 @@
             els.settingsPanel.classList.add('hidden');
         };
 
-        // --- Utils ---
+        // --- Utils & Presets ---
         window.loadPreset = (key) => {
-            const defaults = {
-                'Friends': ["Buddy 1", "Buddy 2", "Buddy 3"],
-                'Office': ["Boss", "Manager", "Intern"],
-            };
-            const list = defaults[key] || [];
-            list.forEach(n => state.names.push({ name: n, isSample: false }));
+            let list = [];
+            // Check custom save first
+            const custom = localStorage.getItem(`wp_saved_group_${key}`);
+            if (custom) {
+                list = JSON.parse(custom);
+            } else {
+                // Check defaults
+                const defaults = {
+                    'Friends': ["Buddy 1", "Buddy 2", "Buddy 3"],
+                    'Office': ["Boss", "Manager", "Intern"],
+                };
+                // Map strings to objects
+                list = (defaults[key] || []).map(n => ({ name: n, isSample: false }));
+            }
+            
+            // Append
+            list.forEach(p => state.names.push(p));
             saveState(); renderPlayers(); updateMath();
             toast(`Added ${key}`);
         };
 
         window.saveCurrentAsPreset = () => {
-            toast("Group saved locally!");
-            // Logic placeholder
+            if(state.names.length === 0) { toast("List is empty!"); return; }
+            
+            const name = prompt("Enter group name (e.g. 'Gym'):");
+            if(name) {
+                localStorage.setItem(`wp_saved_group_${name}`, JSON.stringify(state.names));
+                
+                // Add to presets list if new
+                if(!state.presets.includes(name)) {
+                    state.presets.push(name);
+                    localStorage.setItem('wp_custom_presets_keys', JSON.stringify(state.presets));
+                    renderPresets();
+                }
+                toast(`Saved group '${name}'`);
+            }
         };
 
         $('clearHistoryBtn').onclick = () => {
@@ -663,14 +724,16 @@
 
         // Audio
         function playTone(freq, type, dur) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.value = freq;
-            gain.gain.value = 0.05;
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + dur);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.value = 0.05;
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + dur);
+            } catch(e) { console.warn("Audio error", e); }
         }
         function playWinSound() {
             [400, 600, 800].forEach((f, i) => setTimeout(() => playTone(f, 'sine', 0.2), i*100));
