@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Projects | Shah Construction - Government Contractor</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { primary: '#0B4F9C', secondary: '#1479C9', dark: '#0F2D52', silver: '#C7CCD4', light: '#E8ECF1', white: '#FFFFFF' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F8FAFC; color: #334155; -webkit-font-smoothing: antialiased; }
+        .bg-blueprint { background-color: #FFFFFF; background-image: linear-gradient(rgba(199, 204, 212, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(199, 204, 212, 0.3) 1px, transparent 1px); background-size: 40px 40px; }
+        .shadow-corporate { box-shadow: 0 4px 6px -1px rgba(15, 45, 82, 0.1), 0 2px 4px -1px rgba(15, 45, 82, 0.06); }
+        .shadow-hover-premium:hover { box-shadow: 0 20px 25px -5px rgba(15, 45, 82, 0.1), 0 10px 10px -5px rgba(15, 45, 82, 0.04); transform: translateY(-4px); transition: all 0.4s ease; }
+        
+        /* Lenis Smooth Scroll */
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        /* Filter buttons */
+        .filter-btn.active { background-color: #0B4F9C; color: white; border-color: #0B4F9C; }
+        
+        /* Project Modal */
+        #project-modal-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        #project-modal-overlay.active { opacity: 1; visibility: visible; }
+        #project-modal-content { transform: scale(0.95); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        #project-modal-overlay.active #project-modal-content { transform: scale(1); opacity: 1; }
+
+        /* Timeline Styles */
+        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: #C7CCD4; top: 0; z-index: 0; }
+        .timeline-dot { position: absolute; left: 50%; transform: translate(-50%, 0); width: 24px; height: 24px; background: #0B4F9C; border: 4px solid #FFFFFF; border-radius: 50%; z-index: 10; box-shadow: 0 0 0 4px #1479C9; }
+        @media (max-width: 768px) {
+            .timeline-line { left: 24px; }
+            .timeline-dot { left: 24px; }
+        }
+
+        .category-badge {
+            clip-path: polygon(0 0, 100% 0%, 90% 100%, 0% 100%);
+        }
+
+        /* Testimonial slider */
+        .testimonial-slider { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .testimonial-slide { scroll-snap-align: center; }
+        .testimonial-slider::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden">
+    <!-- Header -->
+    <header class="bg-white border-b-4 border-brand-primary sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center h-24">
+            <a href="index.html" class="flex items-center gap-4 group">
+                <div class="relative w-28 h-auto overflow-hidden transition-transform group-hover:scale-105">
+                    <img src="images/SC Logo.jpg" alt="Shah Construction Logo" class="w-full h-full object-contain">
+                </div>
+                <div class="flex flex-col ml-1 hidden sm:flex">
+                    <span class="font-display text-3xl font-black leading-none text-brand-dark uppercase tracking-tight">Shah</span>
+                    <span class="font-sans text-sm font-bold leading-tight text-brand-secondary uppercase tracking-[0.2em] mt-0.5">Construction</span>
+                </div>
+            </a>
+            <nav class="hidden md:flex gap-8 items-center">
+                <a href="index.html" class="font-sans text-sm font-bold uppercase tracking-wider text-brand-dark hover:text-brand-primary transition-colors pb-1">Home</a>
+                <a href="about.html" class="font-sans text-sm font-bold uppercase tracking-wider text-brand-dark hover:text-brand-primary transition-colors pb-1">About</a>
+                <a href="projects.html" class="font-sans text-sm font-bold uppercase tracking-wider text-brand-primary border-b-2 border-brand-primary pb-1">Projects</a>
+                <a href="contact.html" class="font-sans text-sm font-bold uppercase tracking-wider text-brand-dark hover:text-brand-primary transition-colors pb-1">Contact</a>
+                <a href="contact.html" class="ml-4 bg-brand-primary text-white px-6 py-2.5 text-sm font-bold uppercase tracking-wider hover:bg-brand-dark transition-colors shadow-corporate border border-transparent">Submit Tender</a>
+            </nav>
+            <button id="mobile-menu-btn" class="md:hidden text-brand-dark hover:text-brand-primary p-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-t border-brand-silver">
+            <div class="flex flex-col px-4 py-4 gap-4">
+                <a href="index.html" class="text-brand-light text-sm font-bold uppercase tracking-wide">Home</a>
+                <a href="about.html" class="text-brand-light text-sm font-bold uppercase tracking-wide">About</a>
+                <a href="projects.html" class="text-white text-sm font-bold uppercase tracking-wide">Projects</a>
+                <a href="contact.html" class="text-brand-light text-sm font-bold uppercase tracking-wide">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- SECTION 1: HERO BANNER -->
+        <section class="relative bg-brand-dark text-white pt-24 pb-32 overflow-hidden flex items-center min-h-[70vh]">
+            <div class="absolute inset-0 z-0">
+                <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <!-- Placeholder video, falls back to image -->
+                    <source src="images/VDO.mp4" type="video/mp4">
+                    <img src="https://images.unsplash.com/photo-1545657424-df373cb73da4?auto=format&fit=crop&w=2000&q=80" alt="Highway Infrastructure" class="w-full h-full object-cover">
+                </video>
+                <div class="absolute inset-0 bg-brand-dark/85"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
+                <span class="inline-block py-1.5 px-4 bg-brand-primary/80 border border-brand-secondary/40 text-brand-light text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md gs-reveal">
+                    Premium Portfolio
+                </span>
+                <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-tight mb-6 text-white drop-shadow-md gs-reveal">
+                    Our <span class="text-brand-secondary">Projects</span>
+                </h1>
+                <p class="font-sans text-brand-light text-lg md:text-xl leading-relaxed mb-12 max-w-3xl mx-auto gs-reveal">
+                    A Portfolio of Quality, Engineering Excellence, and Trusted Infrastructure Development.
+                </p>
+                
+                <!-- Animated Statistics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto pt-8 border-t border-brand-silver/20 gs-reveal">
+                    <div class="flex flex-col items-center">
+                        <span class="text-4xl md:text-5xl font-display font-black text-brand-secondary mb-2"><span class="counter" data-target="250">0</span>+</span>
+                        <span class="text-xs uppercase tracking-widest font-bold text-brand-light">Projects Completed</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-4xl md:text-5xl font-display font-black text-brand-secondary mb-2"><span class="counter" data-target="20">0</span>+</span>
+                        <span class="text-xs uppercase tracking-widest font-bold text-brand-light">Years Experience</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-4xl md:text-5xl font-display font-black text-brand-secondary mb-2"><span class="counter" data-target="100">0</span>+</span>
+                        <span class="text-xs uppercase tracking-widest font-bold text-brand-light">Satisfied Clients</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-4xl md:text-5xl font-display font-black text-brand-secondary mb-2"><span class="counter" data-target="98">0</span>%</span>
+                        <span class="text-xs uppercase tracking-widest font-bold text-brand-light">Success Rate</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SECTION: GOVERNMENT PROJECTS (Priority Section) -->
+        <section class="py-24 bg-white border-b border-brand-silver/30">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 gs-up">
+                    <span class="block text-brand-primary font-bold tracking-widest uppercase text-xs mb-3">Core Expertise</span>
+                    <h2 class="font-display text-4xl font-black text-brand-dark uppercase tracking-tight">Government Infrastructure Portfolio</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" id="govt-projects-container">
+                    <!-- Project Cards populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 & 3: ALL PROJECTS FILTER & GRID -->
+        <section class="py-24 bg-brand-light relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12 gs-up">
+                    <h2 class="font-display text-4xl font-black text-brand-dark uppercase tracking-tight mb-4">Complete Portfolio</h2>
+                    <p class="font-sans text-brand-dark/70 text-lg max-w-2xl mx-auto">Browse our diverse expertise across various sectors of construction and development.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mb-16 gs-up">
+                    <button class="filter-btn active px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="all">All Projects</button>
+                    <button class="filter-btn px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="Government">Government Projects</button>
+                    <button class="filter-btn px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="Industrial">Industrial</button>
+                    <button class="filter-btn px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="Commercial">Commercial</button>
+                    <button class="filter-btn px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="Residential">Residential</button>
+                    <button class="filter-btn px-6 py-2 border border-brand-silver text-brand-dark font-bold text-xs uppercase tracking-widest hover:border-brand-primary hover:text-brand-primary transition-colors" data-filter="Renovation">Renovation</button>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="all-projects-container">
+                    <!-- Project Cards populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SECTION: CONSTRUCTION PROCESS -->
+        <section class="py-24 bg-brand-dark text-white overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 gs-up">
+                    <span class="block text-brand-secondary font-bold tracking-widest uppercase text-xs mb-3">Our Methodology</span>
+                    <h2 class="font-display text-4xl font-black uppercase tracking-tight">Construction Process</h2>
+                </div>
+
+                <div class="relative max-w-4xl mx-auto py-10" id="timeline-container">
+                    <div class="timeline-line bg-brand-secondary/30"></div>
+                    
+                    <!-- Steps will be generated by JS -->
+                    <div id="process-steps"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SECTION: CLIENT TESTIMONIALS -->
+        <section class="py-24 bg-white border-b border-brand-silver/30">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 gs-up">
+                    <span class="block text-brand-primary font-bold tracking-widest uppercase text-xs mb-3">Client Feedback</span>
+                    <h2 class="font-display text-4xl font-black text-brand-dark uppercase tracking-tight">What Our Clients Say</h2>
+                </div>
+
+                <div class="flex overflow-x-auto gap-8 pb-8 testimonial-slider gs-up pt-4 px-4 -mx-4 snap-x">
+                    <!-- Testimonial 1 -->
+                    <div class="min-w-[300px] md:min-w-[400px] bg-brand-light p-8 border border-brand-silver/50 shadow-sm testimonial-slide rounded-sm">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-brand-silver rounded-full overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                                <img src="images/construction 1.jpg" alt="Client" class="w-full h-full object-cover grayscale">
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold uppercase text-brand-dark text-sm">Arjun Deshmukh</h4>
+                                <span class="text-xs font-medium text-brand-primary uppercase tracking-wider block">Municipal Engineer</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 text-brand-secondary mb-4">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        </div>
+                        <h5 class="font-display font-black text-brand-dark uppercase mb-2">Regional Treatment Plant</h5>
+                        <p class="font-sans text-brand-dark/70 text-sm leading-relaxed italic">"Shah Construction displayed immense technical competence during the water treatment project. Their adherence to timelines and safety protocols is unmatched in the sector."</p>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="min-w-[300px] md:min-w-[400px] bg-brand-light p-8 border border-brand-silver/50 shadow-sm testimonial-slide rounded-sm">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-brand-silver rounded-full overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                                <img src="images/Construction 2.jpg" alt="Client" class="w-full h-full object-cover grayscale">
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold uppercase text-brand-dark text-sm">Vikram Patil</h4>
+                                <span class="text-xs font-medium text-brand-primary uppercase tracking-wider block">Logistics Director</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 text-brand-secondary mb-4">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        </div>
+                        <h5 class="font-display font-black text-brand-dark uppercase mb-2">Industrial Warehouse</h5>
+                        <p class="font-sans text-brand-dark/70 text-sm leading-relaxed italic">"The industrial logistics facility delivered by Shah Construction optimized our supply chain profoundly. Their focus on heavy-duty execution and rapid delivery was highly impressive."</p>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="min-w-[300px] md:min-w-[400px] bg-brand-light p-8 border border-brand-silver/50 shadow-sm testimonial-slide rounded-sm">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-16 h-16 bg-brand-silver rounded-full overflow-hidden flex-shrink-0 border-2 border-white shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Client" class="w-full h-full object-cover grayscale">
+                            </div>
+                            <div>
+                                <h4 class="font-display font-bold uppercase text-brand-dark text-sm">Meera Desai</h4>
+                                <span class="text-xs font-medium text-brand-primary uppercase tracking-wider block">Commercial Developer</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 text-brand-secondary mb-4">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        </div>
+                        <h5 class="font-display font-black text-brand-dark uppercase mb-2">City Business Hub</h5>
+                        <p class="font-sans text-brand-dark/70 text-sm leading-relaxed italic">"Shah Construction brought our commercial vision to life seamlessly. Their quality standards, transparency, and architectural coordination make them the premier builder in the city."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="py-24 bg-brand-dark text-white relative flex flex-col items-center text-center px-6">
+            <div class="max-w-3xl relative z-10 gs-up">
+                <h2 class="font-display text-4xl md:text-5xl font-black uppercase tracking-tight mb-6">Have a Project in Mind?</h2>
+                <p class="font-sans text-brand-light/80 text-lg leading-relaxed mb-10">
+                    Let's turn your vision into reality with expert planning, engineering excellence, and quality construction.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="contact.html" class="bg-brand-primary text-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-secondary transition-colors shadow-corporate border border-transparent">
+                        Get a Free Quote
+                    </a>
+                    <a href="contact.html" class="bg-transparent border-2 border-brand-silver text-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-silver/10 transition-colors">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white pt-16 pb-8 border-t-4 border-brand-primary mt-auto">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                   <div class="flex items-center gap-3 mb-6 bg-white p-2 rounded-sm inline-flex">
+                        <div class="relative w-24 h-auto overflow-hidden">
+                            <img src="images/SC Logo.jpg" alt="Shah Construction Logo" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <p class="text-brand-silver text-sm max-w-xs leading-relaxed mb-6">
+                        Delivering top-tier infrastructure solutions, civil engineering expertise, and reliable EPC contracting services across Maharashtra for over two decades.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold uppercase tracking-widest text-brand-light mb-6 border-b border-brand-silver/20 pb-2 inline-block">Quick Links</h4>
+                    <ul class="space-y-3 font-sans text-sm font-medium">
+                        <li><a href="about.html" class="text-brand-silver hover:text-white transition-colors">Corporate Profile</a></li>
+                        <li><a href="projects.html" class="text-brand-silver hover:text-white transition-colors">Engineering Portfolio</a></li>
+                        <li><a href="contact.html" class="text-brand-silver hover:text-white transition-colors">Tender / Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold uppercase tracking-widest text-brand-light mb-6 border-b border-brand-silver/20 pb-2 inline-block">Contact Info</h4>
+                    <ul class="space-y-4 font-sans text-sm font-medium">
+                        <li class="flex items-start gap-3">
+                            <svg class="text-brand-secondary mt-1 flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span class="text-brand-silver">Plot no- 75, near Himayat Bagh, N-13, Wankhede Nagar, Cidco, Chhatrapati Sambhajinagar, Maharashtra 431001.</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="text-brand-secondary flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            <span class="text-brand-silver">+91 96652 30352</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <svg class="text-brand-secondary flex-shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <a href="mailto:ksaud42@gmail.com" class="text-brand-silver hover:text-white transition-colors">ksaud42@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-brand-silver/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-brand-silver uppercase tracking-wider font-semibold">&copy; 2026 Shah Construction. All Rights Reserved.</p>
+                <div class="text-xs text-brand-silver/50 tracking-wider">
+                    ISO 9001:2015 CERTIFIED / GOVERNMENT APPROVED EPC
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ============================================== -->
+    <!-- PREMIUM PROJECT SHOWCASE MODAL -->
+    <!-- ============================================== -->
+    <div id="project-modal-overlay" class="fixed inset-0 bg-brand-dark/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 overflow-y-auto">
+        <div id="project-modal-content" class="w-full max-w-5xl bg-white shadow-2xl relative my-auto">
+            <!-- Modal Header / Controls -->
+            <div class="absolute top-0 right-0 z-50 p-4 flex gap-2">
+                <button onclick="closeProjectModal()" class="w-10 h-10 bg-brand-dark text-white flex items-center justify-center hover:bg-brand-primary transition-colors cursor-pointer shadow-md rounded-sm">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="flex flex-col md:flex-row h-full">
+                <!-- Left: Hero Image Gallery -->
+                <div class="md:w-1/2 relative bg-brand-dark min-h-[300px] md:min-h-full">
+                    <img id="modal-project-img" src="images/construction 1.jpg" alt="Project Image" class="w-full h-full object-cover absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent"></div>
+                    
+                    <div class="absolute bottom-6 left-6 right-6 z-10">
+                        <span id="modal-project-category" class="inline-block py-1 px-3 bg-brand-primary text-white text-[10px] font-bold uppercase tracking-widest mb-3">Category</span>
+                        <h3 id="modal-project-name" class="font-display text-3xl md:text-4xl font-black uppercase text-white tracking-tight drop-shadow-md">Project Name</h3>
+                    </div>
+                </div>
+
+                <!-- Right: Details panel -->
+                <div class="md:w-1/2 p-8 md:p-10 flex flex-col max-h-[80vh] overflow-y-auto custom-scrollbar">
+                    <p id="modal-project-desc" class="font-sans text-brand-dark/80 text-sm md:text-base leading-relaxed mb-8">
+                        Project description will load here.
+                    </p>
+
+                    <!-- Info Grid -->
+                    <h4 class="font-display font-bold uppercase text-brand-primary text-sm mb-4 border-b border-brand-silver pb-2">Project Specifications</h4>
+                    <div class="grid grid-cols-2 gap-y-6 gap-x-4 mb-8">
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Location</span>
+                            <span id="modal-loc" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Project Area</span>
+                            <span id="modal-size" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Duration</span>
+                            <span id="modal-duration" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Completion</span>
+                            <span id="modal-year" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Client Type</span>
+                            <span id="modal-client" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-bold text-brand-silver">Construction Type</span>
+                            <span id="modal-type" class="block font-sans font-medium text-brand-dark text-sm">Loading...</span>
+                        </div>
+                    </div>
+
+                    <!-- Highlights -->
+                    <h4 class="font-display font-bold uppercase text-brand-primary text-sm mb-4 border-b border-brand-silver pb-2">Key Highlights</h4>
+                    <ul id="modal-highlights" class="space-y-3 mb-8">
+                        <!-- Populated by JS -->
+                    </ul>
+
+                    <div class="mt-auto pt-6 border-t border-brand-silver flex justify-between">
+                        <button onclick="prevProject()" class="text-xs font-bold uppercase text-brand-dark hover:text-brand-primary transition-colors tracking-widest flex items-center gap-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Previous
+                        </button>
+                        <button onclick="nextProject()" class="text-xs font-bold uppercase text-brand-dark hover:text-brand-primary transition-colors tracking-widest flex items-center gap-2">
+                            Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+
+    <script>
+        // ---------------------------------------------------------
+        // PROJECT DATA (Both Government and Private Portfolio)
+        // ---------------------------------------------------------
+        const projectsData = [
+            {
+                id: "gov-housing-1",
+                name: "Government Staff Quarters",
+                category: "Government Buildings",
+                isGovt: true,
+                image: "images/construction5.jpg",
+                desc: "A major residential complex development for government staff, featuring multiple apartment blocks constructed with heavy-duty structural engineering.",
+                location: "Maharashtra",
+                size: "450,000 Sq Ft",
+                duration: "24 Months",
+                year: "2025",
+                client: "Public Works Dept",
+                type: "EPC Turnkey",
+                highlights: ["Quality Construction", "Heavy-Duty Subgrades", "Safety Compliance", "Modern Engineering Standards", "On-Time Completion"]
+            },
+            {
+                id: "gov-housing-2",
+                name: "Municipal Housing Complex",
+                category: "Government Buildings",
+                isGovt: true,
+                image: "images/construction 3.jpg",
+                desc: "A completed administrative and housing block serving as a central hub for municipal workers, built with high security and sustainability standards.",
+                location: "Maharashtra",
+                size: "500,000 Sq Ft",
+                duration: "18 Months",
+                year: "2024",
+                client: "Municipal Corporation",
+                type: "Public Facility",
+                highlights: ["Sustainable Construction Practices", "Heavy Structural Load Design", "Advanced Security Infrastructure", "Public Utility Access"]
+            },
+            {
+                id: "gov-hostel",
+                name: "Public Welfare Hostel",
+                category: "Government Buildings",
+                isGovt: true,
+                image: "images/construction 1.jpg",
+                desc: "A multi-story public welfare hostel designed to safely accommodate hundreds of students, featuring reinforced concrete spanning and safety-first design.",
+                location: "Maharashtra",
+                size: "200,000 Sq Ft",
+                duration: "15 Months",
+                year: "2023",
+                client: "State Education Authority",
+                type: "Civil Engineering",
+                highlights: ["Modern Engineering Standards", "Reinforced Concrete Core", "Safety-First Layout", "Load Optimized Structure"]
+            },
+            {
+                id: "gov-admin",
+                name: "Regional Administrative Block",
+                category: "Government Buildings",
+                isGovt: true,
+                image: "images/completed construction 1.jpg",
+                desc: "A state-of-the-art regional administrative facility currently under construction to centralize public sector offices.",
+                location: "Maharashtra",
+                size: "15 Acres",
+                duration: "20 Months",
+                year: "2025",
+                client: "State Government Board",
+                type: "Public Works",
+                highlights: ["Industrial Grade Integration", "Compliance with Building Standards", "Robust Engineering"]
+            },
+            {
+                id: "gov-utility",
+                name: "District Utility Center",
+                category: "Government Buildings",
+                isGovt: true,
+                image: "images/construction 2.jpg",
+                desc: "A sturdy utility and commercial style complex constructed for municipal distribution and storage operations.",
+                location: "Maharashtra",
+                size: "80,000 Sq Ft",
+                duration: "12 Months",
+                year: "2024",
+                client: "Utility Department",
+                type: "New Construction",
+                highlights: ["Functional Design", "Premium Core Finishes", "Sustainable Layout", "Landscape Development"]
+            },
+            {
+                id: "priv-hub",
+                name: "City Business Hub",
+                category: "Commercial",
+                isGovt: false,
+                image: "images/completed construction.jpg",
+                desc: "A modern commercial complex designed to support retail businesses and office operations.",
+                location: "Maharashtra",
+                size: "50,000 Sq Ft",
+                duration: "14 Months",
+                year: "2023",
+                client: "Commercial Developer",
+                type: "Commercial Core",
+                highlights: ["Commercial Infrastructure", "Modern Architecture", "Energy Efficient Systems", "Underground Parking"]
+            },
+            {
+                id: "priv-heritage",
+                name: "Heritage Home Restoration",
+                category: "Renovation",
+                isGovt: false,
+                image: "images/Heritage Home Restoration.jpeg",
+                desc: "A careful restoration project preserving historical architecture while integrating modern amenities.",
+                location: "Maharashtra",
+                size: "8000 Sq Ft",
+                duration: "10 Months",
+                year: "2022",
+                client: "Private Preservation Trust",
+                type: "Restoration",
+                highlights: ["Historical Preservation", "Structural Reinforcement", "Modern Utilities", "Premium Finishes"]
+            },
+            {
+                id: "priv-sunrise",
+                name: "Sunrise Apartments",
+                category: "Residential",
+                isGovt: false,
+                image: "images/house 1.jpg",
+                desc: "A community-focused apartment project featuring sustainable development practices.",
+                location: "Maharashtra",
+                size: "120,000 Sq Ft",
+                duration: "18 Months",
+                year: "2025",
+                client: "Real Estate Group",
+                type: "Multi-Family Residential",
+                highlights: ["Community Living", "Rainwater Harvesting", "Solar Energy Integration", "Modern Amenities"]
+            },
+            {
+                id: "priv-warehouse",
+                name: "Industrial Warehouse",
+                category: "Industrial",
+                isGovt: false,
+                image: "images/Warehouse.jpeg",
+                desc: "Large-scale warehouse construction for logistics and supply chain operations.",
+                location: "Maharashtra",
+                size: "85,000 Sq Ft",
+                duration: "8 Months",
+                year: "2024",
+                client: "Logistics Firm",
+                type: "Heavy Industrial",
+                highlights: ["Heavy-Duty Structure", "Reinforced Flooring", "Logistics Optimization", "High Load Capacity"]
+            },
+            {
+                id: "priv-office",
+                name: "Downtown Office Remodel",
+                category: "Renovation",
+                isGovt: false,
+                image: "images/office.jpg",
+                desc: "Complete transformation of an office building into a modern collaborative workspace.",
+                location: "Maharashtra",
+                size: "15,000 Sq Ft",
+                duration: "6 Months",
+                year: "2023",
+                client: "Tech Corporation",
+                type: "Commercial Interior",
+                highlights: ["Modern Workspaces", "Exterior Renovation", "Interior Redesign", "Productivity Focused Layout"]
+            }
+        ];
+
+        let currentProjectIndex = 0;
+
+        // Populate Grids
+        const govtContainer = document.getElementById('govt-projects-container');
+        const allContainer = document.getElementById('all-projects-container');
+
+        function createProjectCard(proj, index) {
+            const isGov = proj.isGovt;
+            return `
+                <div class="bg-white border border-brand-silver/50 group cursor-pointer hover:shadow-2xl transition-all duration-500 overflow-hidden project-card-item" data-category="${proj.category}" onclick="openProjectModal(${index})">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${proj.image}" alt="${proj.name}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 bg-brand-dark/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="absolute top-4 left-4 category-badge bg-brand-primary text-white py-1.5 px-4 text-[10px] font-bold uppercase tracking-widest shadow-md">
+                            ${proj.category}
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 relative bg-white transform transition-transform duration-500 group-hover:-translate-y-2">
+                        <span class="block text-brand-secondary text-[10px] font-bold uppercase tracking-widest mb-2">${proj.client}</span>
+                        <h3 class="font-display text-xl md:text-2xl font-black uppercase text-brand-dark tracking-tight mb-3 group-hover:text-brand-primary transition-colors">${proj.name}</h3>
+                        
+                        <div class="flex items-center gap-4 text-[11px] font-bold uppercase tracking-wide text-brand-dark/50 mb-6 border-t border-brand-silver/30 pt-4">
+                            <span class="flex items-center gap-1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ${proj.location.substring(0,18)}</span>
+                            <span>•</span>
+                            <span>${proj.year}</span>
+                        </div>
+
+                        <div class="inline-flex items-center gap-2 text-brand-primary font-bold text-xs uppercase tracking-widest group-hover:gap-3 transition-all">
+                            View Details <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProjects() {
+            let govtHTML = '';
+            let allHTML = '';
+            
+            projectsData.forEach((proj, idx) => {
+                const card = createProjectCard(proj, idx);
+                if (proj.isGovt) govtHTML += card;
+                allHTML += card; // All projects go in the main grid
+            });
+            
+            govtContainer.innerHTML = govtHTML;
+            allContainer.innerHTML = allHTML;
+        }
+
+        renderProjects();
+
+        // ---------------------------------------------------------
+        // PROJECT FILTERING Logic
+        // ---------------------------------------------------------
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const filter = e.target.getAttribute('data-filter');
+                
+                // Active states
+                filterBtns.forEach(b => b.classList.remove('active', 'bg-brand-primary', 'text-white'));
+                e.target.classList.add('active', 'bg-brand-primary', 'text-white');
+
+                const cards = document.querySelectorAll('#all-projects-container .project-card-item');
+                cards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if(filter === 'all' || category.includes(filter)) {
+                        card.style.display = 'block';
+                        gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 });
+                    } else {
+                        // Also check if 'Government' filter matches isGovt condition roughly (since categorized differently)
+                        if (filter === 'Government' && ['Road Construction', 'Government Buildings', 'Bridge Construction', 'Water Supply Infrastructure'].includes(category)) {
+                             card.style.display = 'block';
+                             gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 });
+                        } else {
+                             card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // ---------------------------------------------------------
+        // Modal Logic
+        // ---------------------------------------------------------
+        const modalOverlay = document.getElementById('project-modal-overlay');
+        const lenisRef = window.lenis; // Stored lenis from below
+
+        function openProjectModal(index) {
+            currentProjectIndex = index;
+            const proj = projectsData[index];
+            
+            // Populate Data
+            document.getElementById('modal-project-img').src = proj.image;
+            document.getElementById('modal-project-name').innerText = proj.name;
+            document.getElementById('modal-project-category').innerText = proj.category;
+            document.getElementById('modal-project-desc').innerText = proj.desc;
+            
+            document.getElementById('modal-loc').innerText = proj.location;
+            document.getElementById('modal-size').innerText = proj.size;
+            document.getElementById('modal-duration').innerText = proj.duration;
+            document.getElementById('modal-year').innerText = proj.year;
+            document.getElementById('modal-client').innerText = proj.client;
+            document.getElementById('modal-type').innerText = proj.type;
+
+            // Highlights
+            const list = document.getElementById('modal-highlights');
+            list.innerHTML = proj.highlights.map(hl => `
+                <li class="flex items-start gap-3">
+                    <span class="w-5 h-5 rounded-sm bg-brand-primary/10 flex items-center justify-center flex-shrink-0 text-brand-primary mt-0.5">
+                        ✓
+                    </span>
+                    <span class="font-sans font-medium text-brand-dark text-sm">${hl}</span>
+                </li>
+            `).join('');
+
+            // Show modal
+            modalOverlay.classList.add('active');
+            if(window.lenisInstance) window.lenisInstance.stop();
+        }
+
+        function closeProjectModal() {
+            modalOverlay.classList.remove('active');
+            if(window.lenisInstance) window.lenisInstance.start();
+        }
+
+        function nextProject() {
+            const nextIdx = (currentProjectIndex + 1) % projectsData.length;
+            openProjectModal(nextIdx);
+        }
+
+        function prevProject() {
+            const prevIdx = (currentProjectIndex - 1 + projectsData.length) % projectsData.length;
+            openProjectModal(prevIdx);
+        }
+
+        // ---------------------------------------------------------
+        // Construction Process Timeline Generator
+        // ---------------------------------------------------------
+        const steps = [
+             {title: "Consultation", desc: "Understanding the scope, requirements, and compliance metrics."},
+             {title: "Planning", desc: "Resource allocation, scheduling, and engineering blueprints."},
+             {title: "Design", desc: "Architectural modeling, structural safety assessments, and approvals."},
+             {title: "Execution", desc: "On-site construction, heavy machinery deployment, and skilled labor management."},
+             {title: "Quality Inspection", desc: "Rigorous ISO-standard testing, safety audits, and material verification."},
+             {title: "Project Handover", desc: "Final clean-up, documentation transfer, and official commissioning."}
+        ];
+
+        const stepsContainer = document.getElementById('process-steps');
+        stepsContainer.innerHTML = steps.map((step, index) => {
+            const isLeft = index % 2 === 0;
+            return `
+                <div class="relative mb-12 md:mb-20 w-full flex flex-col md:flex-row justify-between items-center gs-timeline-item group">
+                    <div class="timeline-dot transition-transform duration-300 group-hover:scale-125"></div>
+                    
+                    ${isLeft ? `
+                        <div class="md:w-[45%] text-left md:text-right w-full pl-12 md:pl-0 pr-0 md:pr-12 md:pb-0 mb-2 md:mb-0">
+                            <span class="font-display text-4xl font-black text-brand-secondary opacity-50 block mb-2">0${index+1}</span>
+                            <h4 class="font-display text-xl md:text-2xl font-bold uppercase tracking-wide text-white mb-2">${step.title}</h4>
+                        </div>
+                        <div class="md:w-[45%] text-left w-full pl-12 md:pl-12">
+                            <div class="bg-brand-white/5 border border-brand-silver/20 p-6 backdrop-blur-sm rounded-sm">
+                                <p class="font-sans text-brand-light/80 text-sm leading-relaxed">${step.desc}</p>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="md:w-[45%] text-left w-full pl-12 md:pl-0 pr-0 md:pr-12 md:pb-0 mb-2 md:mb-0 order-1 md:order-2">
+                             <span class="font-display text-4xl font-black text-brand-secondary opacity-50 block mb-2">0${index+1}</span>
+                             <h4 class="font-display text-xl md:text-2xl font-bold uppercase tracking-wide text-white mb-2">${step.title}</h4>
+                        </div>
+                        <div class="md:w-[45%] text-left md:text-right w-full pl-12 md:pl-0 md:pr-12 order-2 md:order-1">
+                            <div class="bg-brand-white/5 border border-brand-silver/20 p-6 backdrop-blur-sm rounded-sm">
+                                <p class="font-sans text-brand-light/80 text-sm leading-relaxed">${step.desc}</p>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }).join('');
+
+        // ---------------------------------------------------------
+        // Core Setup (Lenis & GSAP)
+        // ---------------------------------------------------------
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+            infinite: false,
+        });
+
+        window.lenisInstance = lenis;
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time)=>{ lenis.raf(time * 1000) });
+        gsap.ticker.lagSmoothing(0);
+
+        // Mobile Menu
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if(btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+        // Close modal on escape or background click
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeProjectModal();
+        });
+        modalOverlay.addEventListener('click', (e) => {
+            if(e.target === modalOverlay) closeProjectModal();
+        });
+
+        // GSAP Animations
+        setTimeout(() => {
+            gsap.utils.toArray('.gs-reveal').forEach(elem => {
+                gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 90%" }, y: 30, opacity: 0, duration: 1, ease: "power3.out" });
+            });
+            gsap.utils.toArray('.gs-up').forEach(elem => {
+                gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 50, opacity: 0, duration: 0.8, ease: "power2.out" });
+            });
+            gsap.utils.toArray('.gs-timeline-item').forEach(item => {
+                gsap.from(item, { scrollTrigger: { trigger: item, start: "top 80%" }, y: 40, opacity: 0, duration: 0.8, ease: "back.out(1.7)" });
+            });
+            
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                gsap.to(counter, { innerHTML: target, duration: 2, ease: "power2.out", snap: { innerHTML: 1 }, scrollTrigger: { trigger: counter, start: "top 90%" }});
+            });
+        }, 100);
+
+    </script>
+</body>
+</html>
